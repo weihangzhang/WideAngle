@@ -14,7 +14,7 @@
 		4D4A6EA71B1BB02E001250F6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D4A6EA61B1BB02E001250F6 /* Images.xcassets */; };
 		4D4A6EAA1B1BB02E001250F6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4D4A6EA81B1BB02E001250F6 /* LaunchScreen.xib */; };
 		4D4A6EB61B1BB02E001250F6 /* WideAngleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4A6EB51B1BB02E001250F6 /* WideAngleTests.m */; };
-		56AC35FE1B4B586500FBDDB8 /* a.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 56AC35FD1B4B586500FBDDB8 /* a.jpg */; };
+		5602B4721B50F6EA00127BE4 /* a.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5602B4711B50F6EA00127BE4 /* a.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,7 +41,7 @@
 		4D4A6EAF1B1BB02E001250F6 /* WideAngleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WideAngleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D4A6EB41B1BB02E001250F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D4A6EB51B1BB02E001250F6 /* WideAngleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WideAngleTests.m; sourceTree = "<group>"; };
-		56AC35FD1B4B586500FBDDB8 /* a.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = a.jpg; path = ../../a.jpg; sourceTree = "<group>"; };
+		5602B4711B50F6EA00127BE4 /* a.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = a.jpg; path = ../a.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				4D4A6E9A1B1BB02E001250F6 /* Info.plist */,
-				56AC35FD1B4B586500FBDDB8 /* a.jpg */,
+				5602B4711B50F6EA00127BE4 /* a.jpg */,
 				4D4A6E9B1B1BB02E001250F6 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -204,8 +204,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D4A6EA51B1BB02E001250F6 /* Main.storyboard in Resources */,
+				5602B4721B50F6EA00127BE4 /* a.jpg in Resources */,
 				4D4A6EAA1B1BB02E001250F6 /* LaunchScreen.xib in Resources */,
-				56AC35FE1B4B586500FBDDB8 /* a.jpg in Resources */,
 				4D4A6EA71B1BB02E001250F6 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

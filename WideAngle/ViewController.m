@@ -36,9 +36,9 @@
 //**************************************** Init Helper ************************************************
 
 - (void) setBackground{
-    UIImage *image = [UIImage imageNamed: @"a.jpg"];
-    self.Back.contentMode = UIViewContentModeScaleAspectFill;
-    self.Back.clipsToBounds = YES;
+    UIImage *image = [self cropImage:[UIImage imageNamed: @"a.jpg"] withArea:self.Back.bounds];
+    //self.Back.contentMode = UIViewContentModeScaleAspectFill;
+    //self.Back.clipsToBounds = YES;
     [self.Back setImage:image];
 }
 
@@ -51,7 +51,6 @@
     
     AVCaptureVideoPreviewLayer *captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
     
-    //captureVideoPreviewLayer.frame = CGRectMake(self.imageView.frame.origin.x, self.imageView.frame.origin.y, self.imageView.frame.size.width/2, self.imageView.frame.size.height/2);
     captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     captureVideoPreviewLayer.frame = self.imageView.bounds;
     
@@ -66,6 +65,12 @@
         // Handle the error appropriately.
         NSLog(@"ERROR: trying to open camera: %@", error);
     }
+    
+    self.stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
+    NSDictionary *outputSettings = [[NSDictionary alloc] initWithObjectsAndKeys: AVVideoCodecJPEG, AVVideoCodecKey, nil];
+    [self.stillImageOutput setOutputSettings:outputSettings];
+    
+    [session addOutput:self.stillImageOutput];
     [session addInput:input];
     
     [session startRunning];
@@ -79,7 +84,6 @@
                                                              delegate:nil
                                                     cancelButtonTitle:@"OK"
                                                     otherButtonTitles: nil];
-        
         [myAlertView show];
     }
 }
@@ -92,7 +96,9 @@
     float xc= self.imageView.frame.origin.x;
     float yc = self.imageView.frame.origin.y;
     
-    self.takePhoto.center = CGPointMake(xc+self.imageView.frame.size.width/2, yc+self.imageView.frame.size.height+10);
+    self.takePhoto.center = CGPointMake(xc+self.imageView.frame.size.width/2, yb+self.Back.frame.size.height+10);
+    
+    //self.selectPhoto.center = CGPointMake(self.takePhoto.center.x, self.takePhoto.center.y + 10);
 
     UIView * l1  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, sw - xb*2, 1)];
     l1.backgroundColor = [UIColor redColor];
@@ -127,10 +133,6 @@
     [self.Grid addSubview:l8];
 
 }
-// Set positions of Back, imageView and Grid
-// imageView.width/Back.width = 2/3
-// width/height = 3/4 for all
-// origin of Back at (0, status bar height)
 
 - (void) setPosition {
     CGRect screen = [[UIScreen mainScreen] applicationFrame];
@@ -144,17 +146,19 @@
 }
 
 // ************************* Actions ******************************************************
-- (IBAction)takePhoto:(UIButton *)sender {
-    
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    picker.allowsEditing = YES;
-    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    
-    [self presentViewController:picker animated:YES completion:NULL];
-    
+- (IBAction)takePhoto:(UIButton *)sender{
+    [self capturePicture];
+    }
+/*
+- (IBAction)takePhoto:(UIButton *)sender{
+     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+     picker.delegate = self;
+     picker.allowsEditing = YES;
+     picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+     
+     [self presentViewController:picker animated:YES completion:NULL];
 }
-
+*/
 - (IBAction)selectPhoto:(UIButton *)sender {
     
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
@@ -166,19 +170,84 @@
     
     
 }
+// ************************* Take Photo Helper ******************************************************
+
+- (UIImage *)cropImage:(UIImage *)image withArea:(CGRect)rect{
+    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], rect);
+    UIImage *img = [UIImage imageWithCGImage:imageRef
+                                       scale:1.0
+                                 orientation:image.imageOrientation];
+    CGImageRelease(imageRef);
+    return img;
+}
+
+- (UIImage * )scaleImage:(UIImage*)image scaledToSize:(CGSize)newSize{
+    UIGraphicsBeginImageContext(newSize);
+    [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
+
+- (UIImage *) addImageToImage:(UIImage *)img andImage2:(UIImage *)img2{
+    
+    CGSize size = self.Back.frame.size;
+    UIGraphicsBeginImageContext(size);
+    
+    CGPoint pointImg1 = CGPointMake(0, 0);
+    [img drawAtPoint:pointImg1];
+    
+    CGPoint pointImg2 = CGPointMake(self.imageView.frame.origin.x, self.imageView.frame.origin.y - self.Back.frame.origin.y);
+    [img2 drawAtPoint: pointImg2];
+    
+    UIImage* result = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return result;
+    
+}
+
+- (void)changeBackground: (UIImage * )newImage{
+    UIImage * currentBack = [self cropImage:self.Back.image withArea:self.Back.bounds];
+    UIImage * captured = [self cropImage:newImage withArea:self.imageView.bounds];
+    //UIImage * captured = [self cropImage:[UIImage imageNamed:@"b.jpg"] withArea:self.imageView.bounds];
+    UIImage * newBack  = [self addImageToImage: currentBack andImage2:captured];
+    [self.Back setImage:newBack];
+}
+
+-(void) capturePicture{
+        AVCaptureConnection *videoConnection = nil;
+        for (AVCaptureConnection *connection in self.stillImageOutput.connections){
+            for (AVCaptureInputPort *port in [connection inputPorts]){
+                if ([[port mediaType] isEqual:AVMediaTypeVideo] ){
+                    videoConnection = connection;
+                    break;
+                }
+            }
+            if (videoConnection) { break; }
+        }
+        NSLog(@"about to request a capture from: %@", self.stillImageOutput);
+        [self.stillImageOutput captureStillImageAsynchronouslyFromConnection:videoConnection completionHandler: ^(CMSampleBufferRef imageSampleBuffer, NSError *error)
+         {
+             CFDictionaryRef exifAttachments = CMGetAttachment( imageSampleBuffer, kCGImagePropertyExifDictionary, NULL);
+             exifAttachments ? NSLog(@"attachements: %@", exifAttachments):NSLog(@"no attachments");
+             NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
+             UIImage * currentImage = [[UIImage alloc] initWithData:imageData];
+             //[self scaleImage:currentImage scaledToSize:self.imageView.frame.size];
+             [self changeBackground:currentImage];
+         }];
+}
+
 
 // ************************* Core Motion ******************************************************
 
 - (void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
     [self startCoreMotion];
-    
 }
 
 -(void) startCoreMotion{
     [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(update) userInfo:nil repeats:YES];
-    
     self.motionManager = [[CMMotionManager alloc] init];
     self.motionManager.deviceMotionUpdateInterval = 1/6000;
     [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame: CMAttitudeReferenceFrameXArbitraryCorrectedZVertical];

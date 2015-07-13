@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D0B5F441B53204200158D03 /* b.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4D0B5F431B53204200158D03 /* b.jpg */; };
 		4D4A6E9C1B1BB02E001250F6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4A6E9B1B1BB02E001250F6 /* main.m */; };
 		4D4A6E9F1B1BB02E001250F6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4A6E9E1B1BB02E001250F6 /* AppDelegate.m */; };
 		4D4A6EA21B1BB02E001250F6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D4A6EA11B1BB02E001250F6 /* ViewController.m */; };
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4D0B5F431B53204200158D03 /* b.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = b.jpg; sourceTree = SOURCE_ROOT; };
 		4D4A6E961B1BB02E001250F6 /* WideAngle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WideAngle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D4A6E9A1B1BB02E001250F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D4A6E9B1B1BB02E001250F6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			children = (
 				4D4A6E9A1B1BB02E001250F6 /* Info.plist */,
 				5602B4711B50F6EA00127BE4 /* a.jpg */,
+				4D0B5F431B53204200158D03 /* b.jpg */,
 				4D4A6E9B1B1BB02E001250F6 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -204,6 +207,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D4A6EA51B1BB02E001250F6 /* Main.storyboard in Resources */,
+				4D0B5F441B53204200158D03 /* b.jpg in Resources */,
 				5602B4721B50F6EA00127BE4 /* a.jpg in Resources */,
 				4D4A6EAA1B1BB02E001250F6 /* LaunchScreen.xib in Resources */,
 				4D4A6EA71B1BB02E001250F6 /* Images.xcassets in Resources */,

@@ -36,7 +36,7 @@
 //**************************************** Init Helper ************************************************
 
 - (void) setBackground{
-    UIImage *image = [self cropImage:[UIImage imageNamed: @"a.jpg"] withArea:self.Back.bounds];
+    UIImage *image = [self scaleImage:[UIImage imageNamed: @"a.jpg"] toSize:self.Back.frame.size];
     //self.Back.contentMode = UIViewContentModeScaleAspectFill;
     //self.Back.clipsToBounds = YES;
     [self.Back setImage:image];
@@ -53,7 +53,6 @@
     
     captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     captureVideoPreviewLayer.frame = self.imageView.bounds;
-    
     
     [self.imageView.layer addSublayer:captureVideoPreviewLayer];
     
@@ -149,6 +148,7 @@
 - (IBAction)takePhoto:(UIButton *)sender{
     [self capturePicture];
     }
+
 /*
 - (IBAction)takePhoto:(UIButton *)sender{
      UIImagePickerController *picker = [[UIImagePickerController alloc] init];
@@ -159,6 +159,7 @@
      [self presentViewController:picker animated:YES completion:NULL];
 }
 */
+
 - (IBAction)selectPhoto:(UIButton *)sender {
     
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
@@ -172,16 +173,7 @@
 }
 // ************************* Take Photo Helper ******************************************************
 
-- (UIImage *)cropImage:(UIImage *)image withArea:(CGRect)rect{
-    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], rect);
-    UIImage *img = [UIImage imageWithCGImage:imageRef
-                                       scale:1.0
-                                 orientation:image.imageOrientation];
-    CGImageRelease(imageRef);
-    return img;
-}
-
-- (UIImage * )scaleImage:(UIImage*)image scaledToSize:(CGSize)newSize{
+- (UIImage *) scaleImage:(UIImage*)image toSize:(CGSize)newSize{
     UIGraphicsBeginImageContext(newSize);
     [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
     UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -208,9 +200,8 @@
 }
 
 - (void)changeBackground: (UIImage * )newImage{
-    UIImage * currentBack = [self cropImage:self.Back.image withArea:self.Back.bounds];
-    UIImage * captured = [self cropImage:newImage withArea:self.imageView.bounds];
-    //UIImage * captured = [self cropImage:[UIImage imageNamed:@"b.jpg"] withArea:self.imageView.bounds];
+    UIImage * currentBack = self.Back.image;
+    UIImage * captured = [self scaleImage:newImage toSize:self.imageView.frame.size];
     UIImage * newBack  = [self addImageToImage: currentBack andImage2:captured];
     [self.Back setImage:newBack];
 }
@@ -233,7 +224,6 @@
              exifAttachments ? NSLog(@"attachements: %@", exifAttachments):NSLog(@"no attachments");
              NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
              UIImage * currentImage = [[UIImage alloc] initWithData:imageData];
-             //[self scaleImage:currentImage scaledToSize:self.imageView.frame.size];
              [self changeBackground:currentImage];
          }];
 }

@@ -37,8 +37,6 @@
 
 - (void) setBackground{
     UIImage *image = [self scaleImage:[UIImage imageNamed: @"a.jpg"] toSize:self.Back.frame.size];
-    //self.Back.contentMode = UIViewContentModeScaleAspectFill;
-    //self.Back.clipsToBounds = YES;
     [self.Back setImage:image];
 }
 
@@ -147,7 +145,7 @@
 // ************************* Actions ******************************************************
 - (IBAction)takePhoto:(UIButton *)sender{
     [self capturePicture];
-    }
+}
 
 /*
 - (IBAction)takePhoto:(UIButton *)sender{

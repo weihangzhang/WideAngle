@@ -29,11 +29,11 @@
     [self displayAlert];
     
     [self liveCamera];
-     //----- SHOW LIVE CAMERA PREVIEW -----
     
 }
 
 //**************************************** Init Helper ************************************************
+int count = 0;
 
 - (void) setBackground{
     UIImage *image = [self scaleImage:[UIImage imageNamed: @"a.jpg"] toSize:self.Back.frame.size];
@@ -96,7 +96,7 @@
     self.takePhoto.center = CGPointMake(xc+self.imageView.frame.size.width/2, yb+self.Back.frame.size.height+10);
     
     //self.selectPhoto.center = CGPointMake(self.takePhoto.center.x, self.takePhoto.center.y + 10);
-
+    self.selectPhoto.center = CGPointMake(xc+self.imageView.frame.size.width/2, yc+self.imageView.frame.size.height+50);
     UIView * l1  = [[UIView alloc] initWithFrame:CGRectMake(0, 0, sw - xb*2, 1)];
     l1.backgroundColor = [UIColor redColor];
     [self.Grid addSubview:l1];
@@ -182,6 +182,8 @@
 
 - (UIImage *) addImageToImage:(UIImage *)img andImage2:(UIImage *)img2{
     
+    count++;
+    
     CGSize size = self.Back.frame.size;
     UIGraphicsBeginImageContext(size);
     
@@ -193,6 +195,10 @@
     
     UIImage* result = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    
+    if(count==1)
+        [self startCoreMotion];
+    
     return result;
     
 }
@@ -231,7 +237,6 @@
 
 - (void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self startCoreMotion];
 }
 
 -(void) startCoreMotion{
@@ -242,7 +247,7 @@
 }
 
 - (void) updateCamera:(float)roll :(float)pitch :(float)yaw :(float)accX :(float)accY :(float)accZ{
-    [self.imageView setFrame:CGRectMake(self.Back.frame.size.width/6 - 200*roll, self.Back.frame.size.height/6 - 200*pitch - 70, self.imageView.frame.size.width, self.imageView.frame.size.height)];
+    [self.imageView setFrame:CGRectMake(self.Back.frame.size.width/6 - 100*roll, self.Back.frame.size.height/6 - 100*pitch - 70, self.imageView.frame.size.width, self.imageView.frame.size.height)];
 }
 
 - (void) update{
